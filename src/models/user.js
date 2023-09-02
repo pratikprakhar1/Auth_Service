@@ -23,7 +23,9 @@ module.exports = (sequelize, DataTypes) => {
      type : DataTypes.STRING,
      allowNull : false,
      unique: true,
-     isEmail : true ,                //validater to check regular expression of email
+     validate: {
+      isEmail: true
+    }              //validater to check regular expression of email
     },
     password:{
       type : DataTypes.STRING,
