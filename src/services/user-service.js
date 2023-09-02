@@ -2,6 +2,7 @@ const UserRepository = require('../repository/user-repository');
 const jwt = require('jsonwebtoken');
 const bcrypt = require('bcrypt');
 const {JWT_KEY} = require('../config/serverConfig');
+const AppErrors = require('../utils/error-handler');
 class UserService{
 
     constructor ()
@@ -15,8 +16,22 @@ class UserService{
             const user = await this.UserRepository.create(data);
             return user
         } catch (error) {
-            console.log("something went wrong in service layer");
-            throw error;
+            if(error.name == 'SequelizeValidationError') {
+                throw error;
+            }
+            if(error.name == 'SequelizeUniqueConstraintError') {
+                throw error;
+            }
+            if (error.statusCode) {
+                throw error;
+            } else {
+                // Default to a 500 Internal Server Error
+                throw {
+                    statusCode: 500,
+                    message: 'Something went wrong in service layer',
+                    explanation: 'Internal server error',
+                };
+            }
         }
     }
     async signin(email,plainPassword)

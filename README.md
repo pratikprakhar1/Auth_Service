@@ -62,7 +62,7 @@ Inside the `src/config` folder, create a new file named `config.json`. Add the f
      "development": {
        "username": "<YOUR_DB_LOGIN_NAME>",
        "password": "<YOUR_DB_PASSWORD>",
-       "database": "Flights_Search_DB_DEV",
+       "database": "Authenticate_DB_DEV",
        "host": "127.0.0.1",
        "dialect": "mysql"
      }
