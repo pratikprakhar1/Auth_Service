@@ -20,7 +20,7 @@ const create = async (req,res) =>
         })
     } catch (error) {
         //console.log(error);
-        return res.status(error.statusCode).json({
+        return res.status(500).json({
             message: error.message,
             data: {},
             success: false,
@@ -28,6 +28,25 @@ const create = async (req,res) =>
         });
     }
 
+}
+const get = async (req, res) => {
+    try {
+        const response = await userService.getUser(req.params.id);
+        return res.status(201).json({
+            data: response,
+            success: true,
+            err: {},
+            message: 'Successfully fetched the user'
+        });
+    } catch (error) {
+        console.log(error);
+        return res.status(500).json({
+            data: {},
+            success: false,
+            message: 'Not able to fetch the user',
+            err: error
+        });
+    }
 }
 const signIn = async (req,res) =>{
     try {
@@ -94,5 +113,6 @@ module.exports = {
     create,
     signIn,
     isAuthenticated,
-    isAdmin
+    isAdmin,
+    get
 }
