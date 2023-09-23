@@ -37,9 +37,7 @@ class UserService{
     async assignrole(data)
     {
         try {
-            console.log("--->");
             const UserRole = await this.UserRepository.assignRole(data);
-            console.log("--->",UserRole);
             return UserRole;
         } catch (error) {
             if(error.name == 'SequelizeValidationError') {

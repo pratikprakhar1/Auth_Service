@@ -33,7 +33,6 @@ const assignrole = async (req,res) =>
 {
 
     try {
-        console.log("--->",req.body);
         const response = await userService.assignrole({
             RoleId : req.body.RoleId,
             UserId : req.body.UserId,
