@@ -34,6 +34,32 @@ class UserService{
             }
         }
     }
+    async assignrole(data)
+    {
+        try {
+            console.log("--->");
+            const UserRole = await this.UserRepository.assignRole(data);
+            console.log("--->",UserRole);
+            return UserRole;
+        } catch (error) {
+            if(error.name == 'SequelizeValidationError') {
+                throw error;
+            }
+            if(error.name == 'SequelizeUniqueConstraintError') {
+                throw error;
+            }
+            if (error.statusCode) {
+                throw error;
+            } else {
+                // Default to a 500 Internal Server Error
+                throw {
+                    statusCode: 500,
+                    message: 'Something went wrong in service layer',
+                    explanation: 'Internal server error',
+                };
+            }
+        }
+    }
     async getUser(userId){
         try{
             const user = await this.UserRepository.getById(userId);

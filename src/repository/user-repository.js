@@ -1,4 +1,4 @@
-const { User,Role } = require('../models/index');
+const {UserRoles,User,Role } = require('../models/index');
 const ValidationError = require('../utils/validation-error');
 const UniquenessError = require('../utils/validation-error');
 class UserRepository {
@@ -20,6 +20,40 @@ class UserRepository {
             throw error ;
         }
     }
+    async assignRole(data) {
+    try {
+        const { UserId, RoleId } = data;
+        
+        // Check if the user exists
+        const user = await User.findByPk(UserId);
+        if (!user) {
+        throw new ValidationError('Invalid userId');
+        }
+
+        // Check if the role exists
+        const role = await Role.findByPk(RoleId);
+        if (!role) {
+        throw new ValidationError('Invalid roleId');
+        }
+
+        const userRole = await UserRoles.create(data);
+        return userRole;
+    } catch (error) {
+        if (error instanceof ValidationError) {
+        throw error; // Re-throw custom validation error
+        } else if (error instanceof UniquenessError) {
+        throw error; // Re-throw custom uniqueness error
+        } else if (error.name === 'SequelizeValidationError') {
+        throw new ValidationError('Validation error', error.errors);
+        } else if (error.name === 'SequelizeUniqueConstraintError') {
+        throw new UniquenessError('Uniqueness constraint error');
+        }
+
+        console.error('Something went wrong in the repository layer:', error);
+        throw error;
+    }
+    }
+
     async destroy(userId)
     {
         try {

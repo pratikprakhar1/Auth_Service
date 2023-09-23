@@ -1,4 +1,4 @@
-const {response} = require('express');
+const {express} = require('express');
 const UserService = require('../services/user-service');
 
 const userService = new UserService();
@@ -20,6 +20,32 @@ const create = async (req,res) =>
         })
     } catch (error) {
         //console.log(error);
+        return res.status(500).json({
+            message: error.message,
+            data: {},
+            success: false,
+            err: error.explanation
+        });
+    }
+
+}
+const assignrole = async (req,res) =>
+{
+
+    try {
+        console.log("--->",req.body);
+        const response = await userService.assignrole({
+            RoleId : req.body.RoleId,
+            UserId : req.body.UserId,
+        });
+        return res.status(201).json({
+            success : true,
+            message : 'Succesfully created a new user role',
+            data : response , 
+            error : {},
+
+        })
+    } catch (error) {
         return res.status(500).json({
             message: error.message,
             data: {},
@@ -114,5 +140,6 @@ module.exports = {
     signIn,
     isAuthenticated,
     isAdmin,
-    get
+    get,
+    assignrole
 }
